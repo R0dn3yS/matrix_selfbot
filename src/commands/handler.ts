@@ -1,5 +1,6 @@
 import { LogService, MatrixClient, MessageEvent, RichReply, UserID } from 'matrix-bot-sdk';
 import { runHelloCommand } from './hello';
+import { runAwCommand } from './aw';
 import * as htmlEscape from 'escape-html';
 
 export const COMMAND_PREFIX = '\\';
@@ -44,6 +45,8 @@ export default class CommandHandler {
     try {
       if (args[0] === 'hello') {
         return runHelloCommand(roomId, event, args, this.client);
+      } else if (args[0] === 'aw') {
+        return runAwCommand(roomId, event, args, this.client);
       } else {
         const help = '' +
           '\\hello      - Pings the bot.\n' +
