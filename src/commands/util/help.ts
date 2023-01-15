@@ -1,16 +1,20 @@
 import { MessageEvent, MessageEventContent } from 'matrix-bot-sdk';
-import * as htmlEscape from 'html-escape';
 import { CommandMatrixClient } from '../..';
 
 export default {
-  name: 'aw',
-  description: 'Search Archwiki',
-  usage: ' [Search term]',
+  name: 'help',
+  description: 'Return help menu',
+  usage: '',
   run: async (roomId: string, event: MessageEvent<MessageEventContent>, args: string[], client: CommandMatrixClient) => {
-    const url = 'https://wiki.archlinux.org/index.php?search=' + args.join('+');
-    const newUrl = await fetch(url).then(res => res.url);
+    let helpMessage = '<br /><pre><code>Commands:<br /><br />';
 
-    let text = newUrl;
+    for (const command of client.commands as unknown as [string, any][]) {
+      helpMessage += `${command[1].name}${command[1].usage}: ${command[1].description}<br />`;
+    }
+
+    helpMessage += '<br />Arguments: (optional) [required]</code></pre>';
+
+    let text = helpMessage;
 
     return client.sendMessage(roomId, {
       body: text,

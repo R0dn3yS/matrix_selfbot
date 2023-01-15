@@ -3,8 +3,6 @@ import { AutojoinRoomsMixin, ICryptoStorageProvider, LogLevel, LogService, Matri
 import * as path from 'path';
 import config from './config';
 
-const prefix = '\\';
-
 LogService.setLogger(new RichConsoleLogger());
 LogService.setLevel(LogLevel.DEBUG);
 LogService.muteModule('Metrics');
@@ -20,12 +18,14 @@ if (config.encryption) {
 export class CommandMatrixClient extends MatrixClient {
   commands: Map<string, unknown>;
   categories: string[];
+  prefix: string;
 
   constructor(home: string, access: string, storage: SimpleFsStorageProvider, crypto: ICryptoStorageProvider) {
     super(home, access, storage, crypto);
 
     this.commands = new Map();
     this.categories = readdirSync('src/commands');
+    this.prefix = '\\';
   }
 }
 
@@ -47,9 +47,9 @@ client.on('room.message', async (roomId: string, ev: any) => {
   if (event.sender !== await client.getUserId()) return;
   if (event.messageType !== 'm.text') return;
 
-  if (!event.textBody.startsWith(prefix)) return;
+  if (!event.textBody.startsWith(client.prefix)) return;
 
-  const args = event.textBody.slice(prefix.length).trim().split(/ +/g);
+  const args = event.textBody.slice(client.prefix.length).trim().split(/ +/g);
   const cmd = args.shift().toLowerCase();
 
   console.log(`Commands: ${cmd}`);
