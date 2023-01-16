@@ -5,7 +5,7 @@ import { CommandMatrixClient } from "..";
 export async function emojiHandler(roomId: string, event: MessageEvent<MessageEventContent>, client: CommandMatrixClient) {
   const args = event.textBody.replace('\n\n', ' ').trim().split(/ +/g);
 
-  let newText = event.textBody;
+  let newTextArr = event.textBody.split(' ');
 
   for (const arg of args) {
     if (arg.startsWith(':') && arg.endsWith(':')) {
@@ -19,10 +19,11 @@ export async function emojiHandler(roomId: string, event: MessageEvent<MessageEv
 
       const mxcUrl = await client.uploadContent(readFileSync(`assets/emoji/${emojiName}.png`), 'image/png', `${emojiName}.png`);
 
-      newText = newText.replace(`:${emojiName}:${emojiSize}:`, `<img height="${emojiSize}" src="${mxcUrl}" alt="${emojiName}">`);
-      newText = newText.replace(`:${emojiName}:`, `<img height="${emojiSize}" src="${mxcUrl}" alt="${emojiName}">`);
+      newTextArr[newTextArr.indexOf(arg)] = `<img height="${emojiSize}" src="${mxcUrl}" alt="${emojiName}">`;
     }
   }
+
+  const newText = newTextArr.join(' ');
 
   console.log(newText);
   if (newText === event.textBody) return;
