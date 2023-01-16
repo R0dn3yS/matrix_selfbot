@@ -15,11 +15,12 @@ export async function emojiHandler(roomId: string, event: MessageEvent<MessageEv
       let emojiSize = emojiData[2] === '' ? 32 : parseInt(emojiData[2]);
       if (emojiSize === undefined) emojiSize = 32;
 
-      if (!client.emoji.includes(`${emojiName}.png`)) continue;
+      const emoji = client.emoji.get(`${emojiName}.png`);
+      console.log(emoji);
 
-      const mxcUrl = await client.uploadContent(readFileSync(`assets/emoji/${emojiName}.png`), 'image/png', `${emojiName}.png`);
+      if (!emoji) return;
 
-      newTextArr[newTextArr.indexOf(arg)] = `<img height="${emojiSize}" src="${mxcUrl}" alt="${emojiName}">`;
+      newTextArr[newTextArr.indexOf(arg)] = `<img height="${emojiSize}" src="${emoji[1]}" alt="${emojiName}">`;
     }
   }
 

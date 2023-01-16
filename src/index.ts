@@ -1,4 +1,4 @@
-import { readdirSync } from 'fs';
+import { readdirSync, readFileSync } from 'fs';
 import { AutojoinRoomsMixin, ICryptoStorageProvider, LogLevel, LogService, MatrixClient, MessageEvent, RichConsoleLogger, RustSdkCryptoStorageProvider, SimpleFsStorageProvider } from 'matrix-bot-sdk';
 import * as path from 'path';
 import config from './config';
@@ -19,7 +19,7 @@ if (config.encryption) {
 export class CommandMatrixClient extends MatrixClient {
   commands: Map<string, unknown>;
   categories: string[];
-  emoji: string[];
+  emoji: Map<string, string>;
   prefix: string;
 
   constructor(home: string, access: string, storage: SimpleFsStorageProvider, crypto: ICryptoStorageProvider) {
@@ -27,16 +27,20 @@ export class CommandMatrixClient extends MatrixClient {
 
     this.commands = new Map();
     this.categories = readdirSync('src/commands');
-    this.emoji = readdirSync('assets/emoji');
+    this.emoji = new Map();
     this.prefix = '\\';
   }
 }
 
 const client = new CommandMatrixClient(config.homeserverUrl, config.accessToken, storage, cryptoStore);
 
-
 ['command'].forEach(async handler => {
   (await import (`./handlers/${handler}`)).default(client);
+});
+
+readdirSync('assets/emoji').forEach(async emoji => {
+  const mxc = await client.uploadContent(readFileSync(`assets/emoji/${emoji}`), 'image/png', emoji);
+  client.emoji.set(emoji, mxc);
 });
 
 if (config.autoJoin) {
