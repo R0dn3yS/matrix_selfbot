@@ -9,7 +9,7 @@ export default {
     let helpMessage = '<br /><pre><code>Commands:<br /><br />';
 
     for (const command of client.commands as unknown as [string, any][]) {
-      helpMessage += `${command[1].name}${command[1].usage}: ${command[1].description}<br />`;
+      helpMessage += `${client.prefix}${command[1].name}${command[1].usage}: ${command[1].description}<br />`;
     }
 
     helpMessage += '<br />Arguments: (optional) [required]</code></pre>';
