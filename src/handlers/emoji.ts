@@ -20,7 +20,7 @@ export async function emojiHandler(roomId: string, event: MessageEvent<MessageEv
 
       if (!emoji) return;
 
-      newTextArr[newTextArr.indexOf(arg)] = `<img height="${emojiSize}" src="${emoji[1]}" alt="${emojiName}">`;
+      newTextArr[newTextArr.indexOf(arg)] = `<img height="${emojiSize}" src="${emoji}" alt="${emojiName}">`;
     }
   }
 
