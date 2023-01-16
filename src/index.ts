@@ -18,7 +18,6 @@ if (config.encryption) {
 
 export class CommandMatrixClient extends MatrixClient {
   commands: Map<string, unknown>;
-  categories: string[];
   emoji: Map<string, string>;
   prefix: string;
 
@@ -26,7 +25,6 @@ export class CommandMatrixClient extends MatrixClient {
     super(home, access, storage, crypto);
 
     this.commands = new Map();
-    this.categories = readdirSync('src/commands');
     this.emoji = new Map();
     this.prefix = '\\';
   }
