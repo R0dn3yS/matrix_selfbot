@@ -1,5 +1,4 @@
 import { MessageEvent, MessageEventContent } from 'matrix-bot-sdk';
-import * as htmlEscape from 'html-escape';
 import { CommandMatrixClient } from '../..';
 
 export default {

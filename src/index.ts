@@ -2,6 +2,7 @@ import { readdirSync } from 'fs';
 import { AutojoinRoomsMixin, ICryptoStorageProvider, LogLevel, LogService, MatrixClient, MessageEvent, RichConsoleLogger, RustSdkCryptoStorageProvider, SimpleFsStorageProvider } from 'matrix-bot-sdk';
 import * as path from 'path';
 import config from './config';
+import { emojiHandler } from './handlers/emoji';
 
 LogService.setLogger(new RichConsoleLogger());
 LogService.setLevel(LogLevel.DEBUG);
@@ -18,6 +19,7 @@ if (config.encryption) {
 export class CommandMatrixClient extends MatrixClient {
   commands: Map<string, unknown>;
   categories: string[];
+  emoji: string[];
   prefix: string;
 
   constructor(home: string, access: string, storage: SimpleFsStorageProvider, crypto: ICryptoStorageProvider) {
@@ -25,6 +27,7 @@ export class CommandMatrixClient extends MatrixClient {
 
     this.commands = new Map();
     this.categories = readdirSync('src/commands');
+    this.emoji = readdirSync('assets/emoji');
     this.prefix = '\\';
   }
 }
@@ -46,21 +49,23 @@ client.on('room.message', async (roomId: string, ev: any) => {
   if (event.isRedacted) return;
   if (event.sender !== await client.getUserId()) return;
   if (event.messageType !== 'm.text') return;
+  if (event.content['m.new_content']) return;
+  
+  console.log(event.content);
 
+  if (event.textBody.includes(':')) return emojiHandler(roomId, event, client);
   if (!event.textBody.startsWith(client.prefix)) return;
 
   const args = event.textBody.slice(client.prefix.length).trim().split(/ +/g);
   const cmd = args.shift().toLowerCase();
 
-  console.log(`Commands: ${cmd}`);
-
   if (cmd.length === 0) return;
 
   let command: any = client.commands.get(cmd);
-
-  console.log(`Commands: ${command}`);
   
   if (command) command.run(roomId, event, args, client);
+
+  // Emoji
 });
 
 LogService.info('index', 'Starting sync...');
