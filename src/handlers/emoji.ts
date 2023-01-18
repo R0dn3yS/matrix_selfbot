@@ -1,4 +1,3 @@
-import { readFileSync } from "fs";
 import { MessageEvent, MessageEventContent } from "matrix-bot-sdk";
 import { CommandMatrixClient } from "..";
 
