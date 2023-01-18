@@ -44,8 +44,6 @@ const rawData = readFileSync('textreplace.json').toString();
 const kaomojiData = JSON.parse(rawData);
 client.kaomoji = new Map(Object.entries(kaomojiData));
 
-console.log(client.kaomoji);
-
 ['command'].forEach(async handler => {
   (await import (`./handlers/${handler}`)).default(client);
 });
@@ -66,8 +64,6 @@ client.on('room.message', async (roomId: string, ev: any) => {
   if (event.isRedacted) return;
   if (event.messageType !== 'm.text') return;
   if (event.content['m.new_content']) return;
-  
-  console.log(event.content);
 
   if (event.textBody.includes(':')) emojiHandler(roomId, event, client);
   if (event.textBody.includes(';')) return textreplaceHandler(roomId, event, client);
