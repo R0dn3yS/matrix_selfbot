@@ -49,7 +49,6 @@ client.on('room.message', async (roomId: string, ev: any) => {
   const event = new MessageEvent(ev);
 
   if (event.isRedacted) return;
-  if (event.sender !== await client.getUserId()) return;
   if (event.messageType !== 'm.text') return;
   if (event.content['m.new_content']) return;
   
@@ -66,8 +65,6 @@ client.on('room.message', async (roomId: string, ev: any) => {
   let command: any = client.commands.get(cmd);
   
   if (command) command.run(roomId, event, args, client);
-
-  // Emoji
 });
 
 LogService.info('index', 'Starting sync...');

@@ -3,6 +3,8 @@ import { MessageEvent, MessageEventContent } from "matrix-bot-sdk";
 import { CommandMatrixClient } from "..";
 
 export async function emojiHandler(roomId: string, event: MessageEvent<MessageEventContent>, client: CommandMatrixClient) {
+  if (event.sender !== await client.getUserId()) return;
+
   const args = event.textBody.replace('\n\n', ' ').trim().split(/ +/g);
 
   let newTextArr = event.textBody.split(' ');
