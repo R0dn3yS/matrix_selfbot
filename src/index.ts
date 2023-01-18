@@ -20,6 +20,7 @@ export class CommandMatrixClient extends MatrixClient {
   commands: Map<string, unknown>;
   emoji: Map<string, string>;
   prefix: string;
+  mimeMap: Map<string, string>;
 
   constructor(home: string, access: string, storage: SimpleFsStorageProvider, crypto: ICryptoStorageProvider) {
     super(home, access, storage, crypto);
@@ -27,18 +28,24 @@ export class CommandMatrixClient extends MatrixClient {
     this.commands = new Map();
     this.emoji = new Map();
     this.prefix = '\\';
+    this.mimeMap = new Map();
   }
 }
 
 const client = new CommandMatrixClient(config.homeserverUrl, config.accessToken, storage, cryptoStore);
+
+client.mimeMap.set('png', 'image/png');
+client.mimeMap.set('jpg', 'image/jpeg');
+client.mimeMap.set('gif', 'image/gif');
 
 ['command'].forEach(async handler => {
   (await import (`./handlers/${handler}`)).default(client);
 });
 
 readdirSync('assets/emoji').forEach(async emoji => {
-  const mxc = await client.uploadContent(readFileSync(`assets/emoji/${emoji}`), 'image/png', emoji);
-  client.emoji.set(emoji, mxc);
+  const ext = emoji.split('.')[1];
+  const mxc = await client.uploadContent(readFileSync(`assets/emoji/${emoji}`), client.mimeMap.get(ext), emoji);
+  client.emoji.set(emoji.split('.')[0], mxc);
 });
 
 if (config.autoJoin) {
