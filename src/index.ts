@@ -3,6 +3,7 @@ import { AutojoinRoomsMixin, ICryptoStorageProvider, LogLevel, LogService, Matri
 import * as path from 'path';
 import config from './config';
 import { emojiHandler } from './handlers/emoji';
+import { textreplaceHandler } from './handlers/textreplace';
 
 LogService.setLogger(new RichConsoleLogger());
 LogService.setLevel(LogLevel.DEBUG);
@@ -21,6 +22,7 @@ export class CommandMatrixClient extends MatrixClient {
   emoji: Map<string, string>;
   prefix: string;
   mimeMap: Map<string, string>;
+  kaomoji: Map<string, string>;
 
   constructor(home: string, access: string, storage: SimpleFsStorageProvider, crypto: ICryptoStorageProvider) {
     super(home, access, storage, crypto);
@@ -37,6 +39,12 @@ const client = new CommandMatrixClient(config.homeserverUrl, config.accessToken,
 client.mimeMap.set('png', 'image/png');
 client.mimeMap.set('jpg', 'image/jpeg');
 client.mimeMap.set('gif', 'image/gif');
+
+const rawData = readFileSync('textreplace.json').toString();
+const kaomojiData = JSON.parse(rawData);
+client.kaomoji = new Map(Object.entries(kaomojiData));
+
+console.log(client.kaomoji);
 
 ['command'].forEach(async handler => {
   (await import (`./handlers/${handler}`)).default(client);
@@ -61,7 +69,8 @@ client.on('room.message', async (roomId: string, ev: any) => {
   
   console.log(event.content);
 
-  if (event.textBody.includes(':')) return emojiHandler(roomId, event, client);
+  if (event.textBody.includes(':')) emojiHandler(roomId, event, client);
+  if (event.textBody.includes(';')) return textreplaceHandler(roomId, event, client);
   if (!event.textBody.startsWith(client.prefix)) return;
 
   const args = event.textBody.slice(client.prefix.length).trim().split(/ +/g);

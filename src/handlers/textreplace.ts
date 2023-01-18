@@ -1,7 +1,7 @@
 import { MessageEvent, MessageEventContent } from "matrix-bot-sdk";
 import { CommandMatrixClient } from "..";
 
-export async function emojiHandler(roomId: string, event: MessageEvent<MessageEventContent>, client: CommandMatrixClient) {
+export async function textreplaceHandler(roomId: string, event: MessageEvent<MessageEventContent>, client: CommandMatrixClient) {
   if (event.sender !== await client.getUserId()) return;
 
   const args = event.textBody.replace('\n\n', ' ').trim().split(/ +/g);
@@ -9,24 +9,16 @@ export async function emojiHandler(roomId: string, event: MessageEvent<MessageEv
   let newTextArr = event.textBody.split(' ');
 
   for (const arg of args) {
-    if (arg.startsWith(':') && arg.endsWith(':')) {
-      const emojiData = arg.split(':');
-      
-      const emojiName = emojiData[1];
-      let emojiSize = emojiData[2] === '' ? 32 : parseInt(emojiData[2]);
-      if (emojiSize === undefined) emojiSize = 32;
+    if (arg.startsWith(';') && arg.endsWith(';')) {
+      const kaomojiName = arg.replaceAll(';', '');
 
-      const emoji = client.emoji.get(`${emojiName}`);
-      console.log(emoji);
+      if (!client.kaomoji.has(kaomojiName)) return;
 
-      if (!emoji) return;
-
-      newTextArr[newTextArr.indexOf(arg)] = `<img height="${emojiSize}" src="${emoji}" alt="${emojiName}">`;
+      newTextArr[newTextArr.indexOf(arg)] = client.kaomoji.get(kaomojiName);
     }
   }
 
   const newText = newTextArr.join(' ');
-
   if (newText === event.textBody) return;
 
   return client.sendMessage(roomId, {
