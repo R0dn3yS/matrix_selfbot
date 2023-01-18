@@ -19,13 +19,16 @@ export default {
 
     const mxc = await client.uploadContent(readFileSync(`httpcat/${code}.jpg`), 'image/jpeg', `${code}.jpg`);
 
-    const text = `<img height="512" src="${mxc}" alt="${code}">`
-
     return client.sendMessage(roomId, {
-      body: text,
-      msgtype: 'm.text',
-      format: 'org.matrix.custom.html',
-      formatted_body: text,
+      "body": code,
+      "info": {
+        "h": 0,
+        "mimetype": "",
+        "size": 0,
+        "w": 0
+      },
+      "msgtype": "m.image",
+      "url": mxc
     });
   }
 }
