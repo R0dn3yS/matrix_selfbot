@@ -1,3 +1,5 @@
+import { createWriteStream } from "fs";
+import { get } from "https";
 import { CommandMatrixClient } from "..";
 
 export async function getRoomDisplayName(roomId: string, client: CommandMatrixClient): Promise<string> {
@@ -31,3 +33,9 @@ export async function getRoomDisplayName(roomId: string, client: CommandMatrixCl
 }
 
 export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
+
+export function downloadImage(url: string, filepath: string) {
+  get(url, (res) => {
+    res.pipe(createWriteStream(filepath));
+  });
+}

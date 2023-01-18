@@ -17,10 +17,13 @@ export default {
     } else {
       const flags = ['-c', '1', '-W', '2', args[0]];
 
-      const exitCode = spawn('ping', flags).exitCode;
-
-      const success = exitCode === 0 ? 'successful' : 'unsuccessful';
+      const ping = spawn('ping', flags);
       await delay(2500);
+
+      const exitCode = ping.exitCode;
+      const success = exitCode === 0 ? 'successful' : 'unsuccessful';
+      console.log(exitCode);
+      
       text = `Ping to ${args[0]} was ${success}.`;
     }
 
