@@ -5,6 +5,7 @@ export default {
   name: 'shrug',
   description: 'Append ¯\\_(ツ)_/¯ to the text',
   usage: ' [text]',
+  admin: true,
   run: (roomId: string, event: MessageEvent<MessageEventContent>, args: string[], client: CommandMatrixClient) => {
     let text = args.join(' ');
     text += ' ¯\\_(ツ)_/¯';

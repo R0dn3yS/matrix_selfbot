@@ -5,6 +5,7 @@ export default {
   name: 'emoji_size',
   description: 'Set the default emoji size',
   usage: ' [size]',
+  admin: true,
   run: async (roomId: string, event: MessageEvent<MessageEventContent>, args: string[], client: CommandMatrixClient) => {
     let text = '';
     

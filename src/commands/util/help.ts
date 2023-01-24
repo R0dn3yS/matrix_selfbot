@@ -5,6 +5,7 @@ export default {
   name: 'help',
   description: 'Return help menu',
   usage: '',
+  admin: false,
   run: async (roomId: string, event: MessageEvent<MessageEventContent>, args: string[], client: CommandMatrixClient) => {
     let helpMessage = '<br /><pre><code>Commands:<br /><br />';
 

@@ -65,7 +65,6 @@ client.on('room.message', async (roomId: string, ev: any) => {
 
   if (event.isRedacted) return;
   if (event.messageType !== 'm.text') return;
-  if (event.sender !== await client.getUserId()) return;
   if (event.content['m.new_content']) return;
 
   if (event.textBody.includes(':')) emojiHandler(roomId, event, client);
@@ -79,7 +78,12 @@ client.on('room.message', async (roomId: string, ev: any) => {
 
   let command: any = client.commands.get(cmd);
   
-  if (command) command.run(roomId, event, args, client);
+  if (!command) return
+  if (command.admin) {
+    if (event.sender !== await client.getUserId()) command.run(roomId, event, args, client);
+  } else {
+    command.run(roomId, event, args, client);
+  }
 });
 
 LogService.info('index', 'Starting sync...');
