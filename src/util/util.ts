@@ -9,7 +9,7 @@ export async function sendText(roomId: string, client: CommandMatrixClient, text
 
   const tmp = [];
   for (const part of unformatted.split('<')) {
-    tmp.push(part.split('>')[part.length - 1]);
+    tmp.push(part.split('>')[part.split('>').length - 1]);
   }
   unformatted = tmp.join('');
   unformatted = htmlEscape(unformatted);
