@@ -1,7 +1,7 @@
 import { spawn } from 'child_process';
 import { MessageEvent, MessageEventContent } from 'matrix-bot-sdk';
 import { CommandMatrixClient } from '../..';
-import { delay, getRoomDisplayName } from '../../util/util';
+import { delay, getRoomDisplayName, sendText } from '../../util/util';
 
 export default {
   name: 'ping',
@@ -28,11 +28,6 @@ export default {
       text = `Ping to ${args[0]} was ${success}.`;
     }
 
-    return client.sendMessage(roomId, {
-      body: text,
-      msgtype: 'm.text',
-      format: 'org.matrix.custom.html',
-      formatted_body: text,
-    });
+    return await sendText(roomId, client, text);
   }
 }

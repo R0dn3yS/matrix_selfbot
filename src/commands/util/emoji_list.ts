@@ -1,5 +1,6 @@
 import { MessageEvent, MessageEventContent } from 'matrix-bot-sdk';
 import { CommandMatrixClient } from '../..';
+import { sendText } from '../../util/util';
 
 export default {
   name: 'emoji_list',
@@ -13,11 +14,6 @@ export default {
       text += `${emoji[0]}: <img height="24" src="${emoji[1]}" alt="${emoji[0]}">, `;
     }
 
-    return client.sendMessage(roomId, {
-      body: text,
-      msgtype: 'm.text',
-      format: 'org.matrix.custom.html',
-      formatted_body: text,
-    });
+    return await sendText(roomId, client, text);
   }
 }
