@@ -1,7 +1,7 @@
 import { createWriteStream } from "fs";
 import { get } from "https";
 import { CommandMatrixClient } from "..";
-import * as htmlEscape from 'html-escape';
+import * as htmlEscape from 'escape-html';
 
 export async function sendText(roomId: string, client: CommandMatrixClient, text: string) {
   let unformatted = text;
