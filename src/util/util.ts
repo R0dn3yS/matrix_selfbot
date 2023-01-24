@@ -1,6 +1,7 @@
 import { createWriteStream } from "fs";
 import { get } from "https";
 import { CommandMatrixClient } from "..";
+import * as htmlEscape from 'html-escape';
 
 export async function sendText(roomId: string, client: CommandMatrixClient, text: string) {
   let unformatted = text;
@@ -11,14 +12,15 @@ export async function sendText(roomId: string, client: CommandMatrixClient, text
     tmp.push(part.split('>')[part.length - 1]);
   }
   unformatted = tmp.join('');
+  unformatted = htmlEscape(unformatted);
 
   formatted = formatted.replace('\n', '<br>');
 
   return await client.sendMessage(roomId, {
-    body: unformatted,
+    body: unformatted + ' (SelfBot)',
     msgtype: 'm.text',
     format: 'org.matrix.custom.html',
-    formatted_body: formatted,
+    formatted_body: formatted + ' (<a href="{https://github.com/R0dn3yS/matrix_selfbot}\">SelfBot</a>)"',
   });
 }
 
