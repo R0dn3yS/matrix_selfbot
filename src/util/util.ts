@@ -20,7 +20,7 @@ export async function sendText(roomId: string, client: CommandMatrixClient, text
     body: unformatted + ' (SelfBot)',
     msgtype: 'm.text',
     format: 'org.matrix.custom.html',
-    formatted_body: formatted + ' (<a href="{https://github.com/R0dn3yS/matrix_selfbot}\">SelfBot</a>)',
+    formatted_body: formatted + ' (<a href="https://github.com/R0dn3yS/matrix_selfbot">SelfBot</a>)',
   });
 }
 
