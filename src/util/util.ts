@@ -2,6 +2,26 @@ import { createWriteStream } from "fs";
 import { get } from "https";
 import { CommandMatrixClient } from "..";
 
+export async function sendText(roomId: string, client: CommandMatrixClient, text: string) {
+  let unformatted = text;
+  let formatted = text;
+
+  const tmp = [];
+  for (const part of unformatted.split('<')) {
+    tmp.push(part.split('>')[part.length - 1]);
+  }
+  unformatted = tmp.join(' ');
+
+  formatted = formatted.replace('\n', '<br>');
+
+  return await client.sendMessage(roomId, {
+    body: unformatted,
+    msgtype: 'm.text',
+    format: 'org.matrix.custom.html',
+    formatted_body: formatted,
+  });
+}
+
 export async function getRoomDisplayName(roomId: string, client: CommandMatrixClient): Promise<string> {
   let roomName: string;
 

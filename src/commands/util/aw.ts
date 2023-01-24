@@ -1,5 +1,6 @@
 import { MessageEvent, MessageEventContent } from 'matrix-bot-sdk';
 import { CommandMatrixClient } from '../..';
+import { sendText } from '../../util/util';
 
 export default {
   name: 'aw',
@@ -10,13 +11,6 @@ export default {
     const url = 'https://wiki.archlinux.org/index.php?search=' + args.join('+');
     const newUrl = await fetch(url).then(res => res.url);
 
-    let text = newUrl;
-
-    return client.sendMessage(roomId, {
-      body: text,
-      msgtype: 'm.text',
-      format: 'org.matrix.custom.html',
-      formatted_body: text,
-    });
+    return sendText(newUrl);
   }
 }
