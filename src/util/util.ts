@@ -10,7 +10,7 @@ export async function sendText(roomId: string, client: CommandMatrixClient, text
   for (const part of unformatted.split('<')) {
     tmp.push(part.split('>')[part.length - 1]);
   }
-  unformatted = tmp.join(' ');
+  unformatted = tmp.join('');
 
   formatted = formatted.replace('\n', '<br>');
 
