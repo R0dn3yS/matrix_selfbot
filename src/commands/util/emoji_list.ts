@@ -6,7 +6,7 @@ export default {
   description: 'Get a list of usable emojis',
   usage: '',
   run: async (roomId: string, event: MessageEvent<MessageEventContent>, args: string[], client: CommandMatrixClient) => {
-    let text = 'Default emoji size: 24<br />Available emojis:<br />';
+    let text = `Default emoji size: ${client.emojiSize}<br />Available emojis:<br />`;
 
     for (const emoji of client.emoji) {
       text += `${emoji[0]}: <img height="24" src="${emoji[1]}" alt="${emoji[0]}">, `;

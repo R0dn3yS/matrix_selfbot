@@ -13,8 +13,8 @@ export async function emojiHandler(roomId: string, event: MessageEvent<MessageEv
       const emojiData = arg.split(':');
       
       const emojiName = emojiData[1];
-      let emojiSize = emojiData[2] === '' ? 24 : parseInt(emojiData[2]);
-      if (emojiSize === undefined) emojiSize = 24;
+      let emojiSize = emojiData[2] === '' ? client.emojiSize : parseInt(emojiData[2]);
+      if (emojiSize === undefined) emojiSize = client.emojiSize;
 
       const emoji = client.emoji.get(`${emojiName}`);
       console.log(emoji);

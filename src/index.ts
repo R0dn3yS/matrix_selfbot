@@ -20,6 +20,7 @@ if (config.encryption) {
 export class CommandMatrixClient extends MatrixClient {
   commands: Map<string, unknown>;
   emoji: Map<string, string>;
+  emojiSize: number;
   prefix: string;
   mimeMap: Map<string, string>;
   kaomoji: Map<string, string>;
@@ -31,6 +32,7 @@ export class CommandMatrixClient extends MatrixClient {
     this.emoji = new Map();
     this.prefix = '\\';
     this.mimeMap = new Map();
+    this.emojiSize = 24;
   }
 }
 
