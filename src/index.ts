@@ -65,6 +65,7 @@ client.on('room.message', async (roomId: string, ev: any) => {
 
   if (event.isRedacted) return;
   if (event.messageType !== 'm.text') return;
+  if (event.sender !== await client.getUserId()) return;
   if (event.content['m.new_content']) return;
 
   if (event.textBody.includes(':')) emojiHandler(roomId, event, client);
