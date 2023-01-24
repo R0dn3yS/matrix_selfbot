@@ -3,7 +3,7 @@ import { CommandMatrixClient } from '../..';
 import { getCloseMatches } from 'difflib';
 
 export default {
-  name: 'aw',
+  name: 'xkcd',
   description: 'Get an XKCD comic',
   usage: ' (Number/Title)',
   admin: false,
