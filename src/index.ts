@@ -80,7 +80,7 @@ client.on('room.message', async (roomId: string, ev: any) => {
   
   if (!command) return
   if (command.admin) {
-    if (event.sender !== await client.getUserId()) command.run(roomId, event, args, client);
+    if (event.sender === await client.getUserId()) command.run(roomId, event, args, client);
   } else {
     command.run(roomId, event, args, client);
   }
