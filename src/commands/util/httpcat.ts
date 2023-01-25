@@ -14,7 +14,7 @@ export default {
 
     const code = args[0] === undefined ? randomCode.toString() : args[0];
 
-    const filepath = await downloadImage(`https://http.cat/${code}`, `httpcat/${code}.jpg`);
+    const filepath = await downloadImage(`https://http.cat/${code}`, `assets/httpcat/${code}.jpg`);
     await delay(1000);
 
     const mxc = await client.uploadContent(readFileSync(filepath), 'image/jpeg', `${code}.jpg`);
