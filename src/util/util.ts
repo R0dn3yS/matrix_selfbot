@@ -1,4 +1,4 @@
-import { createWriteStream } from "fs";
+import { createWriteStream, existsSync } from "fs";
 import { get } from "https";
 import { CommandMatrixClient } from "..";
 import * as htmlEscape from 'escape-html';
@@ -56,8 +56,25 @@ export async function getRoomDisplayName(roomId: string, client: CommandMatrixCl
 
 export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
-export function downloadImage(url: string, filepath: string) {
+export async function downloadImage(url: string, filepath: string) {
+  if (existsSync(filepath)) {
+    return filepath;
+  }
+
   get(url, (res) => {
     res.pipe(createWriteStream(filepath));
   });
+  return filepath;
+}
+
+export function filterTitle(title: string) {
+  let filteredTitle = '';
+
+  for (const char of title.toLowerCase()) {
+    if (char !== ' ') {
+      filteredTitle += char;
+    }
+  }
+
+  return filteredTitle;
 }
