@@ -1,5 +1,6 @@
 import { MessageEvent, MessageEventContent } from "matrix-bot-sdk";
 import { CommandMatrixClient } from "..";
+import { editMessage } from "../util/util";
 
 export async function emojiHandler(roomId: string, event: MessageEvent<MessageEventContent>, client: CommandMatrixClient) {
   if (event.sender !== await client.getUserId()) return;
@@ -29,20 +30,5 @@ export async function emojiHandler(roomId: string, event: MessageEvent<MessageEv
 
   if (newText === event.textBody) return;
 
-  return client.sendMessage(roomId, {
-    body: `* ${newText}`,
-    msgtype: 'm.text',
-    'm.relates_to': {
-      rel_type: 'm.replace',
-      event_id: event.eventId,
-    },
-    format: 'org.matrix.custom.html',
-    formatted_body: `* ${newText}`,
-    'm.new_content': {
-      'msgtype': 'm.text',
-      'body': newText,
-      'format': 'org.matrix.custom.html',
-      'formatted_body': newText
-    }
-  });
+  return await (editMessage(roomId, client, event, newText));
 }

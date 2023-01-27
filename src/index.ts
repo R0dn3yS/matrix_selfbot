@@ -3,7 +3,10 @@ import { ensureDirSync } from 'fs-extra';
 import { AutojoinRoomsMixin, ICryptoStorageProvider, LogLevel, LogService, MatrixClient, MessageEvent, RichConsoleLogger, RustSdkCryptoStorageProvider, SimpleFsStorageProvider } from 'matrix-bot-sdk';
 import * as path from 'path';
 import config from './config';
+import { aurHandler } from './handlers/aur';
 import { emojiHandler } from './handlers/emoji';
+import { pkgHandler } from './handlers/pkg';
+import { redditHandler } from './handlers/reddit';
 import { textreplaceHandler } from './handlers/textreplace';
 
 ensureDirSync('assets/httpcat');
@@ -74,6 +77,9 @@ client.on('room.message', async (roomId: string, ev: any) => {
 
   if (event.textBody.includes(':')) emojiHandler(roomId, event, client);
   if (event.textBody.includes(';')) return textreplaceHandler(roomId, event, client);
+  if (event.textBody.includes('aur')) return aurHandler(roomId, event, client);
+  if (event.textBody.includes('pkg')) return pkgHandler(roomId, event, client);
+  if (event.textBody.includes('r/')) return redditHandler(roomId, event, client);
   if (!event.textBody.startsWith(client.prefix)) return;
 
   const args = event.textBody.slice(client.prefix.length).trim().split(/ +/g);

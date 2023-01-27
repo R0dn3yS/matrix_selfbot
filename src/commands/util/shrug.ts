@@ -1,5 +1,6 @@
 import { MessageEvent, MessageEventContent } from "matrix-bot-sdk";
 import { CommandMatrixClient } from "../..";
+import { editMessage } from "../../util/util";
 
 export default {
   name: 'shrug',
@@ -10,21 +11,6 @@ export default {
     let text = args.join(' ');
     text += ' ¯\\_(ツ)_/¯';
 
-    return client.sendMessage(roomId, {
-      body: `* ${text}`,
-      msgtype: 'm.text',
-      'm.relates_to': {
-        rel_type: 'm.replace',
-        event_id: event.eventId,
-      },
-      format: 'org.matrix.custom.html',
-      formatted_body: `* ${text}`,
-      'm.new_content': {
-        'msgtype': 'm.text',
-        'body': text,
-        'format': 'org.matrix.custom.html',
-        'formatted_body': text
-      }
-    });
+    return await editMessage(roomId, client, event, text);
   }
 }
