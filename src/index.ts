@@ -1,13 +1,14 @@
-import { mkdirSync, readdirSync, readFileSync } from 'fs';
+import { readdirSync, readFileSync } from 'fs';
+import { ensureDirSync } from 'fs-extra';
 import { AutojoinRoomsMixin, ICryptoStorageProvider, LogLevel, LogService, MatrixClient, MessageEvent, RichConsoleLogger, RustSdkCryptoStorageProvider, SimpleFsStorageProvider } from 'matrix-bot-sdk';
 import * as path from 'path';
 import config from './config';
 import { emojiHandler } from './handlers/emoji';
 import { textreplaceHandler } from './handlers/textreplace';
 
-mkdirSync('assets/httpcat');
-mkdirSync('assets/xkcd');
-mkdirSync('assets/emoji');
+ensureDirSync('assets/httpcat');
+ensureDirSync('assets/xkcd');
+ensureDirSync('assets/emoji');
 
 LogService.setLogger(new RichConsoleLogger());
 LogService.setLevel(LogLevel.DEBUG);
