@@ -8,6 +8,7 @@ export default {
   name: 'xkcd',
   description: 'Get an XKCD comic',
   usage: ' (Number/Title)',
+  category: 'user',
   admin: false,
   run: async (roomId: string, event: MessageEvent<MessageEventContent>, args: string[], client: CommandMatrixClient) => {
     let comic = '';

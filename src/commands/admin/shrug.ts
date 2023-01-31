@@ -6,6 +6,7 @@ export default {
   name: 'shrug',
   description: 'Append ¯\\_(ツ)_/¯ to the text',
   usage: ' [text]',
+  category: 'admin',
   admin: true,
   run: async (roomId: string, event: MessageEvent<MessageEventContent>, args: string[], client: CommandMatrixClient) => {
     let text = args.join(' ');

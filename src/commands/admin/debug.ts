@@ -6,6 +6,7 @@ export default {
   name: 'debug',
   description: 'Return help menu',
   usage: '',
+  category: 'admin',
   admin: true,
   run: async (roomId: string, event: MessageEvent<MessageEventContent>, args: string[], client: CommandMatrixClient) => {
     let text = 'epic fail';
