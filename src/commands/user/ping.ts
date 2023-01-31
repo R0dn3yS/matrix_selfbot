@@ -7,7 +7,7 @@ export default {
   name: 'ping',
   description: 'Ping the selfbot (or any host)',
   usage: ' {host}',
-  category: 'admin',
+  category: 'user',
   admin: false,
   run: async (roomId: string, event: MessageEvent<MessageEventContent>, args: string[], client: CommandMatrixClient) => {
     const roomDisplayName = await getRoomDisplayName(roomId, client);
