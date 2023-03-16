@@ -5,6 +5,7 @@ import * as path from 'path';
 import config from './config';
 import { aurHandler } from './handlers/aur';
 import { emojiHandler } from './handlers/emoji';
+import { mentionHandler } from './handlers/mention';
 import { pkgHandler } from './handlers/pkg';
 import { redditHandler } from './handlers/reddit';
 import { textreplaceHandler } from './handlers/textreplace';
@@ -17,7 +18,7 @@ ensureDirSync('assets/emoji');
 LogService.setLogger(new RichConsoleLogger());
 LogService.setLevel(LogLevel.DEBUG);
 LogService.muteModule('Metrics');
-LogService.info('index', 'Bot starting...');
+LogService.info('index', 'Bot 1ing...');
 
 const storage = new SimpleFsStorageProvider(path.join(config.dataPath, 'bot.json'));
 
@@ -78,6 +79,7 @@ client.on('room.message', async (roomId: string, ev: any) => {
   if (event.content['m.new_content']) return;
 
   if (event.sender === await client.getUserId()) {
+    if (event.textBody.includes('@')) text = await mentionHandler(roomId, event, client, text)
     if (event.textBody.includes(':')) text = await emojiHandler(roomId, event, client, text);
     if (event.textBody.includes(';')) text = await textreplaceHandler(roomId, event, client, text);
     if (event.textBody.includes('aur')) text = await aurHandler(roomId, event, client, text);
