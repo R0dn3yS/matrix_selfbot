@@ -72,7 +72,8 @@ if (config.autoJoin) {
 
 client.on('room.message', async (roomId: string, ev: any) => {
   const event = new MessageEvent(ev);
-  let text = event.textBody;
+  let text = event.raw.content['formatted_body'] ? event.raw.content['formatted_body'] : event.textBody;
+  let origText = text;
 
   if (event.isRedacted) return;
   if (event.messageType !== 'm.text') return;
@@ -86,7 +87,7 @@ client.on('room.message', async (roomId: string, ev: any) => {
     if (event.textBody.includes('pkg')) text = await pkgHandler(roomId, event, client, text);
     if (event.textBody.includes('r/')) text = await redditHandler(roomId, event, client, text);
 
-    if (event.raw.content['formatted_body'] !== text) return editMessage(roomId, client, event, text);
+    if (text !== origText) return editMessage(roomId, client, event, text);
   }
 
   if (!event.textBody.startsWith(client.prefix)) return;
