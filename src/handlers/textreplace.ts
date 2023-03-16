@@ -1,13 +1,12 @@
 import { MessageEvent, MessageEventContent } from "matrix-bot-sdk";
 import { CommandMatrixClient } from "..";
-import { editMessage } from "../util/util";
 
-export async function textreplaceHandler(roomId: string, event: MessageEvent<MessageEventContent>, client: CommandMatrixClient) {
+export async function textreplaceHandler(roomId: string, event: MessageEvent<MessageEventContent>, client: CommandMatrixClient, text: string) {
   if (event.sender !== await client.getUserId()) return;
 
-  const args = event.textBody.replace('\n\n', ' ').trim().split(/ +/g);
+  const args = text.replace('\n\n', ' ').trim().split(/ +/g);
 
-  let newTextArr = event.textBody.split(' ');
+  let newTextArr = text.split(' ');
 
   for (const arg of args) {
     if (arg.startsWith(';') && arg.endsWith(';')) {
@@ -20,7 +19,7 @@ export async function textreplaceHandler(roomId: string, event: MessageEvent<Mes
   }
 
   const newText = newTextArr.join(' ');
-  if (newText === event.textBody) return;
+  if (newText === text) return;
 
-  return await (editMessage(roomId, client, event, newText));
+  return newText
 }

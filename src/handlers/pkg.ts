@@ -2,10 +2,10 @@ import { MessageEvent, MessageEventContent } from "matrix-bot-sdk";
 import { CommandMatrixClient } from "..";
 import { editMessage } from "../util/util";
 
-export async function pkgHandler(roomId: string, event: MessageEvent<MessageEventContent>, client: CommandMatrixClient) {
+export async function pkgHandler(roomId: string, event: MessageEvent<MessageEventContent>, client: CommandMatrixClient, text: string) {
   if (event.sender !== await client.getUserId()) return;
 
-  let newTextArr = event.textBody.split(' ');
+  let newTextArr = text.split(' ');
 
   for (const arg of newTextArr) {
     if (arg.startsWith('{pkg|') && arg.endsWith('}')) {
@@ -15,11 +15,8 @@ export async function pkgHandler(roomId: string, event: MessageEvent<MessageEven
     }
   }
 
-  console.log('hello');
-
   const newText = newTextArr.join(' ');
-  if (newText === event.textBody) return;
+  if (newText === text) return;
 
-  console.log('hello');
-  await editMessage(roomId, client, event, newText);
+  return newText;
 }

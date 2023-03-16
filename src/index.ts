@@ -8,6 +8,7 @@ import { emojiHandler } from './handlers/emoji';
 import { pkgHandler } from './handlers/pkg';
 import { redditHandler } from './handlers/reddit';
 import { textreplaceHandler } from './handlers/textreplace';
+import { editMessage } from './util/util';
 
 ensureDirSync('assets/httpcat');
 ensureDirSync('assets/xkcd');
@@ -70,16 +71,20 @@ if (config.autoJoin) {
 
 client.on('room.message', async (roomId: string, ev: any) => {
   const event = new MessageEvent(ev);
+  let text = event.textBody;
 
   if (event.isRedacted) return;
   if (event.messageType !== 'm.text') return;
   if (event.content['m.new_content']) return;
 
-  if (event.textBody.includes(':')) emojiHandler(roomId, event, client);
-  if (event.textBody.includes(';')) textreplaceHandler(roomId, event, client);
-  if (event.textBody.includes('aur')) aurHandler(roomId, event, client);
-  if (event.textBody.includes('pkg')) pkgHandler(roomId, event, client);
-  if (event.textBody.includes('r/')) redditHandler(roomId, event, client);
+  if (event.textBody.includes(':')) text = await emojiHandler(roomId, event, client, text);
+  if (event.textBody.includes(';')) text = await textreplaceHandler(roomId, event, client, text);
+  if (event.textBody.includes('aur')) text = await aurHandler(roomId, event, client, text);
+  if (event.textBody.includes('pkg')) text = await pkgHandler(roomId, event, client, text);
+  if (event.textBody.includes('r/')) text = await redditHandler(roomId, event, client, text);
+
+  if (event.textBody !== text) editMessage(roomId, client, event, text);
+
   if (!event.textBody.startsWith(client.prefix)) return;
 
   const args = event.textBody.slice(client.prefix.length).trim().split(/ +/g);
