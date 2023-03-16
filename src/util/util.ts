@@ -133,5 +133,5 @@ export function filterTitle(title: string) {
 }
 
 export function getMention(user: string, name: string, pfp: string) {
-  return `<a href="https://matrix.to/#/${user}><img src="${pfp}" height="16"> ${name}</a>`
+  return `<a href="https://matrix.to/#/${user}"><img src="${pfp}" height="16"> ${name}</a>`
 }
