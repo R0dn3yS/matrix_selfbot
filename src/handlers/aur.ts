@@ -15,7 +15,7 @@ export async function aurHandler(roomId: string, event: MessageEvent<MessageEven
   }
 
   const newText = newTextArr.join(' ');
-  if (newText === text) return;
+  if (newText === text) return text;
 
   return newText
 }

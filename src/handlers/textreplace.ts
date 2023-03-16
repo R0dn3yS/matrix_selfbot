@@ -19,7 +19,7 @@ export async function textreplaceHandler(roomId: string, event: MessageEvent<Mes
   }
 
   const newText = newTextArr.join(' ');
-  if (newText === text) return;
+  if (newText === text) return text;
 
   return newText
 }

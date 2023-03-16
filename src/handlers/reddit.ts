@@ -13,7 +13,7 @@ export async function redditHandler(roomId: string, event: MessageEvent<MessageE
   }
 
   const newText = newTextArr.join(' ');
-  if (newText === text) return;
+  if (newText === text) return text;
 
   
   return newText

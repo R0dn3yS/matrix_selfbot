@@ -16,7 +16,7 @@ export async function pkgHandler(roomId: string, event: MessageEvent<MessageEven
   }
 
   const newText = newTextArr.join(' ');
-  if (newText === text) return;
+  if (newText === text) return text;
 
   return newText;
 }

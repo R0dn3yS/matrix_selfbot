@@ -77,13 +77,15 @@ client.on('room.message', async (roomId: string, ev: any) => {
   if (event.messageType !== 'm.text') return;
   if (event.content['m.new_content']) return;
 
-  if (event.textBody.includes(':')) text = await emojiHandler(roomId, event, client, text);
-  if (event.textBody.includes(';')) text = await textreplaceHandler(roomId, event, client, text);
-  if (event.textBody.includes('aur')) text = await aurHandler(roomId, event, client, text);
-  if (event.textBody.includes('pkg')) text = await pkgHandler(roomId, event, client, text);
-  if (event.textBody.includes('r/')) text = await redditHandler(roomId, event, client, text);
+  if (event.sender === await client.getUserId()) {
+    if (event.textBody.includes(':')) text = await emojiHandler(roomId, event, client, text);
+    if (event.textBody.includes(';')) text = await textreplaceHandler(roomId, event, client, text);
+    if (event.textBody.includes('aur')) text = await aurHandler(roomId, event, client, text);
+    if (event.textBody.includes('pkg')) text = await pkgHandler(roomId, event, client, text);
+    if (event.textBody.includes('r/')) text = await redditHandler(roomId, event, client, text);
 
-  if (event.textBody !== text) return editMessage(roomId, client, event, text);
+    if (event.textBody !== text) return editMessage(roomId, client, event, text);
+  }
 
   if (!event.textBody.startsWith(client.prefix)) return;
 

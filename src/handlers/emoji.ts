@@ -27,7 +27,7 @@ export async function emojiHandler(roomId: string, event: MessageEvent<MessageEv
 
   const newText = newTextArr.join(' ');
 
-  if (newText === text) return;
+  if (newText === text) return text;
 
   return newText;
 }
