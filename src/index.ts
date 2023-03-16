@@ -79,7 +79,7 @@ client.on('room.message', async (roomId: string, ev: any) => {
   if (event.content['m.new_content']) return;
 
   if (event.sender === await client.getUserId()) {
-    if (event.textBody.includes('@')) text = await mentionHandler(roomId, event, client, text)
+    text = await mentionHandler(roomId, event, client, text)
     if (event.textBody.includes(':')) text = await emojiHandler(roomId, event, client, text);
     if (event.textBody.includes(';')) text = await textreplaceHandler(roomId, event, client, text);
     if (event.textBody.includes('aur')) text = await aurHandler(roomId, event, client, text);
