@@ -76,10 +76,10 @@ client.on('room.message', async (roomId: string, ev: any) => {
   if (event.content['m.new_content']) return;
 
   if (event.textBody.includes(':')) emojiHandler(roomId, event, client);
-  if (event.textBody.includes(';')) return textreplaceHandler(roomId, event, client);
-  if (event.textBody.includes('aur')) return aurHandler(roomId, event, client);
-  if (event.textBody.includes('pkg')) return pkgHandler(roomId, event, client);
-  if (event.textBody.includes('r/')) return redditHandler(roomId, event, client);
+  if (event.textBody.includes(';')) textreplaceHandler(roomId, event, client);
+  if (event.textBody.includes('aur')) aurHandler(roomId, event, client);
+  if (event.textBody.includes('pkg')) pkgHandler(roomId, event, client);
+  if (event.textBody.includes('r/')) redditHandler(roomId, event, client);
   if (!event.textBody.startsWith(client.prefix)) return;
 
   const args = event.textBody.slice(client.prefix.length).trim().split(/ +/g);
