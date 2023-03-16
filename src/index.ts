@@ -86,7 +86,7 @@ client.on('room.message', async (roomId: string, ev: any) => {
     if (event.textBody.includes('pkg')) text = await pkgHandler(roomId, event, client, text);
     if (event.textBody.includes('r/')) text = await redditHandler(roomId, event, client, text);
 
-    if (event.textBody !== text) return editMessage(roomId, client, event, text);
+    if (event.raw.content['formatted_body'] !== text) return editMessage(roomId, client, event, text);
   }
 
   if (!event.textBody.startsWith(client.prefix)) return;
