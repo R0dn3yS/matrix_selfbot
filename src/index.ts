@@ -18,7 +18,7 @@ ensureDirSync('assets/emoji');
 LogService.setLogger(new RichConsoleLogger());
 LogService.setLevel(LogLevel.DEBUG);
 LogService.muteModule('Metrics');
-LogService.info('index', 'Bot 1ing...');
+LogService.info('index', 'Bot starting...');
 
 const storage = new SimpleFsStorageProvider(path.join(config.dataPath, 'bot.json'));
 
@@ -72,12 +72,21 @@ if (config.autoJoin) {
 
 client.on('room.message', async (roomId: string, ev: any) => {
   const event = new MessageEvent(ev);
-  let text = event.raw.content['formatted_body'] ? event.raw.content['formatted_body'] : event.textBody;
-  let origText = text;
 
   if (event.isRedacted) return;
   if (event.messageType !== 'm.text') return;
   if (event.content['m.new_content']) return;
+
+  let raw = event.raw.content['formatted_body'] ? event.raw.content['formatted_body'] : event.textBody;
+  let text = '';
+
+  if (raw.includes('</mx-reply>')) {
+    text = raw.split('</mx-reply>')[1];
+  } else {
+    text = raw;
+  }
+
+  let origText = text;
 
   if (event.sender === await client.getUserId()) {
     text = await mentionHandler(roomId, event, client, text)
@@ -87,7 +96,7 @@ client.on('room.message', async (roomId: string, ev: any) => {
     if (event.textBody.includes('pkg')) text = await pkgHandler(roomId, event, client, text);
     if (event.textBody.includes('r/')) text = await redditHandler(roomId, event, client, text);
 
-    if (text !== origText) return editMessage(roomId, client, event, text);
+    if (text !== origText) return editMessage(roomId, client, event, `${text}`);
   }
 
   if (!event.textBody.startsWith(client.prefix)) return;
