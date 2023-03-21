@@ -41,8 +41,6 @@ export async function editMessageUnformatted(roomId: string, client: CommandMatr
 }
 
 export async function editMessage(roomId: string, client: CommandMatrixClient, event: MessageEvent<MessageEventContent>, text: string) {
-  text = text.split('</mx-reply>')[text.split('</mx-reply>').length - 1];
-
   let unformatted = text;
   let formatted = text;
 
