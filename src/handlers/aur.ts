@@ -10,7 +10,7 @@ export async function aurHandler(roomId: string, event: MessageEvent<MessageEven
     if (arg.startsWith('{aur|') && arg.endsWith('}')) {
       const pkg = arg.split('{aur|')[1].replaceAll('}', '');
 
-      newTextArr[newTextArr.indexOf(arg)] = `<a href="https://aur.archlinux.org/packages?K=${pkg}">${pkg}</a>`;
+      newTextArr[newTextArr.indexOf(arg)] = `<a href="https://aur.archlinux.org/packages/${pkg}">${pkg}</a>`;
     }
   }
 
