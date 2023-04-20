@@ -12,9 +12,9 @@ export async function textreplaceHandler(roomId: string, event: MessageEvent<Mes
     if (arg.startsWith(';') && arg.endsWith(';')) {
       const kaomojiName = arg.replaceAll(';', '');
 
-      if (!client.kaomoji.has(kaomojiName)) return;
-
-      newTextArr[newTextArr.indexOf(arg)] = client.kaomoji.get(kaomojiName);
+      if (client.kaomoji.has(kaomojiName)) {
+        newTextArr[newTextArr.indexOf(arg)] = client.kaomoji.get(kaomojiName);
+      }      
     }
   }
 
