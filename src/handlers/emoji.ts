@@ -19,9 +19,9 @@ export async function emojiHandler(roomId: string, event: MessageEvent<MessageEv
       const emoji = client.emoji.get(`${emojiName}`);
       console.log(emoji);
 
-      if (!emoji) return;
-
-      newTextArr[newTextArr.indexOf(arg)] = `<img height="${emojiSize}" src="${emoji}" alt="${emojiName}">`;
+      if (emoji) {
+        newTextArr[newTextArr.indexOf(arg)] = `<img height="${emojiSize}" src="${emoji}" alt="${emojiName}">`;
+      }
     }
   }
 
