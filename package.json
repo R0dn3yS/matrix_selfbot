@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc",
     "lint": "tslint --project ./tsconfig.json -t stylish",
-    "start": "ts-node src/index.ts"
+    "start": "ts-node src/index.ts",
+    "fullsync": "ts-node src/fullsync.ts"
   },
   "author": "R0dn3yS",
   "license": "ISC",
