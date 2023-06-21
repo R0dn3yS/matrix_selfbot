@@ -93,7 +93,7 @@ client.on('room.message', async (roomId: string, ev: any) => {
 
     if (text.includes('(SelfBot)')) return;
 
-    if (event.sender === await client.getUserId()) {
+    if (event.sender === await client.getUserId() && !text.startsWith('\\')) {
       text = await mentionHandler(roomId, event, client, text)
       if (event.textBody.includes(':')) text = await emojiHandler(roomId, event, client, text);
       if (event.textBody.includes(';')) text = await textreplaceHandler(roomId, event, client, text);
