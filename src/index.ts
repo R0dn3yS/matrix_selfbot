@@ -91,6 +91,8 @@ client.on('room.message', async (roomId: string, ev: any) => {
 
     let origText = text;
 
+    if (text.includes('(SelfBot)')) return;
+
     if (event.sender === await client.getUserId()) {
       text = await mentionHandler(roomId, event, client, text)
       if (event.textBody.includes(':')) text = await emojiHandler(roomId, event, client, text);
