@@ -17,7 +17,9 @@ export async function bottomHandler(roomId: string, event: MessageEvent<MessageE
 
   const newTextArr = text.split('%b');
 
-  newTextArr[1] = encode(newTextArr[1]);
+  if(newTextArr.length === 3) {
+    newTextArr[1] = encode(newTextArr[1]);
+  }
 
   const newText = newTextArr.join(' ');
   if (newText === text) return text;
