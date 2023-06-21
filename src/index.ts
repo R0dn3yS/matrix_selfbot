@@ -73,50 +73,54 @@ if (config.autoJoin) {
 }
 
 client.on('room.message', async (roomId: string, ev: any) => {
-  const event = new MessageEvent(ev);
+  try {
+    const event = new MessageEvent(ev);
 
-  if (event.isRedacted) return;
-  if (event.messageType !== 'm.text') return;
-  if (event.content['m.new_content']) return;
+    if (event.isRedacted) return;
+    if (event.messageType !== 'm.text') return;
+    if (event.content['m.new_content']) return;
 
-  let raw = event.raw.content['formatted_body'] ? event.raw.content['formatted_body'] : event.textBody;
-  let text = '';
+    let raw = event.raw.content['formatted_body'] ? event.raw.content['formatted_body'] : event.textBody;
+    let text = '';
 
-  if (raw.includes('</mx-reply>')) {
-    text = raw.split('</mx-reply>')[1];
-  } else {
-    text = raw;
-  }
+    if (raw.includes('</mx-reply>')) {
+      text = raw.split('</mx-reply>')[1];
+    } else {
+      text = raw;
+    }
 
-  let origText = text;
+    let origText = text;
 
-  if (event.sender === await client.getUserId()) {
-    text = await mentionHandler(roomId, event, client, text)
-    if (event.textBody.includes(':')) text = await emojiHandler(roomId, event, client, text);
-    if (event.textBody.includes(';')) text = await textreplaceHandler(roomId, event, client, text);
-    if (event.textBody.includes('aur')) text = await aurHandler(roomId, event, client, text);
-    if (event.textBody.includes('pkg')) text = await pkgHandler(roomId, event, client, text);
-    if (event.textBody.includes('r/')) text = await redditHandler(roomId, event, client, text);
-    if (event.textBody.includes('[')) text = await nhentaiHandler(roomId, event, client, text);
-    if (event.textBody.includes('^')) text = await bottomHandler(roomId, event, client, text);
+    if (event.sender === await client.getUserId()) {
+      text = await mentionHandler(roomId, event, client, text)
+      if (event.textBody.includes(':')) text = await emojiHandler(roomId, event, client, text);
+      if (event.textBody.includes(';')) text = await textreplaceHandler(roomId, event, client, text);
+      if (event.textBody.includes('aur')) text = await aurHandler(roomId, event, client, text);
+      if (event.textBody.includes('pkg')) text = await pkgHandler(roomId, event, client, text);
+      if (event.textBody.includes('r/')) text = await redditHandler(roomId, event, client, text);
+      if (event.textBody.includes('[')) text = await nhentaiHandler(roomId, event, client, text);
+      if (event.textBody.includes('^')) text = await bottomHandler(roomId, event, client, text);
 
-    if (text !== origText) return editMessage(roomId, client, event, `${text}`);
-  }
+      if (text !== origText) return editMessage(roomId, client, event, `${text}`);
+    }
 
-  if (!event.textBody.startsWith(client.prefix)) return;
+    if (!event.textBody.startsWith(client.prefix)) return;
 
-  const args = event.textBody.slice(client.prefix.length).trim().split(/ +/g);
-  const cmd = args.shift().toLowerCase();
+    const args = event.textBody.slice(client.prefix.length).trim().split(/ +/g);
+    const cmd = args.shift().toLowerCase();
 
-  if (cmd.length === 0) return;
+    if (cmd.length === 0) return;
 
-  let command: any = client.commands.get(cmd);
-  
-  if (!command) return
-  if (command.admin) {
-    if (event.sender === await client.getUserId()) command.run(roomId, event, args, client);
-  } else {
-    command.run(roomId, event, args, client);
+    let command: any = client.commands.get(cmd);
+    
+    if (!command) return
+    if (command.admin) {
+      if (event.sender === await client.getUserId()) command.run(roomId, event, args, client);
+    } else {
+      command.run(roomId, event, args, client);
+    }
+  } catch (e) {
+  console.log(e);
   }
 });
 
