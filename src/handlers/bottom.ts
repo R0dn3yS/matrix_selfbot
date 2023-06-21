@@ -15,7 +15,7 @@ const SECTION_SEPERATOR = '👉👈';
 export async function bottomHandler(roomId: string, event: MessageEvent<MessageEventContent>, client: CommandMatrixClient, text: string) {
   if (event.sender !== await client.getUserId()) return;
 
-  const newTextArr = text.split('^');
+  const newTextArr = text.split('%b');
 
   newTextArr[1] = encode(newTextArr[1]);
 
