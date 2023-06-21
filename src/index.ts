@@ -91,7 +91,7 @@ client.on('room.message', async (roomId: string, ev: any) => {
 
     let origText = text;
 
-    if (text.includes('(SelfBot)')) return;
+    if (text.includes('(<a href=\"https://github.com/R0dn3yS/matrix_selfbot\">SelfBot</a>)')) return;
 
     if (event.sender === await client.getUserId() && !text.startsWith('\\')) {
       text = await mentionHandler(roomId, event, client, text)
