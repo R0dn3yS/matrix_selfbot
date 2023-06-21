@@ -97,6 +97,7 @@ client.on('room.message', async (roomId: string, ev: any) => {
     if (event.textBody.includes('aur')) text = await aurHandler(roomId, event, client, text);
     if (event.textBody.includes('pkg')) text = await pkgHandler(roomId, event, client, text);
     if (event.textBody.includes('r/')) text = await redditHandler(roomId, event, client, text);
+    if (event.textBody.includes('[')) text = await nhentaiHandler(roomId, event, client, text);
     if (event.textBody.includes('^')) text = await bottomHandler(roomId, event, client, text);
 
     if (text !== origText) return editMessage(roomId, client, event, `${text}`);
